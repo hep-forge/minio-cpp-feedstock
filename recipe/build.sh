@@ -13,6 +13,6 @@ git clone https://github.com/microsoft/vcpkg.git
 mkdir -p build
 cd build
 
-cmake .. -DMINIO_CPP_TEST=ON -DCMAKE_TOOLCHAIN_FILE=../vcpkg/scripts/buildsystems/vcpkg.cmake
+cmake .. -DMINIO_CPP_TEST=ON -DCMAKE_TOOLCHAIN_FILE=../vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_INSTALL_PREFIX=$PREFIX
 make -j$(nproc)
 make install
