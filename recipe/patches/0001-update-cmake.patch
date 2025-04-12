@@ -1,0 +1,43 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index c2610db..7e27bdf 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -57,15 +57,24 @@ endif()
+ # ------------
+ 
+ find_package(OpenSSL REQUIRED)
+-find_package(unofficial-curlpp CONFIG REQUIRED)
+-find_package(unofficial-inih CONFIG REQUIRED)
++find_package(curlpp CONFIG REQUIRED)
++if(NOT curlpp_FOUND)
++  find_package(unofficial-curlpp CONFIG REQUIRED)
++  set(curlpp_LIBRARIES unofficial::curlpp::curlpp)
++endif()
++
++find_package(inih CONFIG REQUIRED)
++if(NOT inih_FOUND)
++  find_package(unofficial-inih CONFIG REQUIRED)
++  set(inih_LIBRARIES unofficial::inih::inireader)
++endif()
+ find_package(nlohmann_json CONFIG REQUIRED)
+ find_package(pugixml CONFIG REQUIRED)
+ find_package(ZLIB REQUIRED)
+ 
+ list(APPEND MINIO_CPP_LIBS
+-  unofficial::curlpp::curlpp
+-  unofficial::inih::inireader
++  ${curlpp_LIBRARIES}
++  ${inih_LIBRARIES}
+   nlohmann_json::nlohmann_json
+   pugixml
+   OpenSSL::SSL OpenSSL::Crypto
+@@ -197,7 +206,7 @@ if (MINIO_CPP_TEST)
+   add_executable(tests tests/tests.cc)
+   target_compile_features(tests PUBLIC cxx_std_${MINIO_CPP_STD})
+   target_include_directories(tests PRIVATE ${CMAKE_CURRENT_LIST_DIR}/include)
+-  target_link_libraries(tests miniocpp ${MINIO_CPP_LIBS})
++  target_link_libraries(tests miniocpp ${MINIO_CPP_LIBS} pthread)
+ endif()
+ 
+ # Minio C++ Documentation
+-- 
