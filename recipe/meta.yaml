@@ -1,5 +1,6 @@
 {% set versions = {
-    "0.3.0": "da0f2f54bf169ad9e5e9368cc9143df4db056fc5c05bb55d8c1d9065e7211f7c"
+    "HEAD": "49e578d286cc0abdfbe92cdd5a643ad893b7a619",
+    "0.3.0": "9d723bd21ccabb8cb5b0025edfd28305a037f8a5"
 } %}
 
 {% set version = environ.get('COMMIT_VERSION', None) %}
@@ -11,10 +12,8 @@ package:
   version: {{ environ.get('ANACONDA_VERSION', version)|replace("-", ".") }}
 
 source:
-  url: "https://github.com/minio/minio-cpp/archive/refs/tags/v{{version}}.tar.gz"
-  {% if versions.get(version, None) %}
-  sha256: {{ versions.get(version) }}
-  {% endif %}
+  git_url: "https://github.com/minio/minio-cpp"
+  git_rev: {{ versions.get(version, "HEAD") }}
   patches:
     - patches/0001-update-cmake.patch
 
