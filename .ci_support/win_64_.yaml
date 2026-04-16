@@ -1,0 +1,12 @@
+c_stdlib:
+- vs
+channel_sources:
+- conda-forge
+channel_targets:
+- conda-forge main
+pugixml:
+- '1.15'
+target_platform:
+- win-64
+zlib:
+- '1'
