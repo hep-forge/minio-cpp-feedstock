@@ -15,8 +15,8 @@ MinIO C++ Client SDK for Amazon S3 Compatible Cloud Storage
 
 | Architecture | Latest published |
 |--------------|------------------|
-| linux-amd64 (`linux-64`) | ✅ `0.3.0` |
-| linux-arm64 (`linux-aarch64`) | ❌ not published |
+| linux-amd64 (`linux-64`) | ✅ `0.3.0.1` |
+| linux-arm64 (`linux-aarch64`) | ✅ `0.3.0.1` |
 
 _As of the last feedstock render; the badges above are live._
 
