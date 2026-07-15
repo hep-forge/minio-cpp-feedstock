@@ -12,6 +12,13 @@ package:
   name: {{ environ.get('ANACONDA_PACKAGE', 'minio-cpp')|string|lower }}
   version: {{ environ.get('ANACONDA_VERSION', version)|replace("-", ".") }}
 
+build:
+  # hec23631_0's uploaded blob vanished from the CDN (404, listed in the
+  # API but not actually retrievable) and a --force reupload of the same
+  # hash didn't restore it. Bump the build number so this produces a
+  # genuinely new filename/hash instead of colliding with the dead one.
+  number: 1
+
 source:
   git_url: "https://github.com/minio/minio-cpp"
   git_rev: {{ versions.get(version, "HEAD") }}
