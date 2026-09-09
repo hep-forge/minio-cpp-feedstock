@@ -1,8 +1,8 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index c2610db..7e27bdf 100644
+index f0660cd..be7765b 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -57,15 +57,24 @@ endif()
+@@ -57,15 +57,39 @@ endif()
  # ------------
  
  find_package(OpenSSL REQUIRED)
@@ -12,6 +12,21 @@ index c2610db..7e27bdf 100644
 +if(NOT curlpp_FOUND)
 +  find_package(unofficial-curlpp CONFIG REQUIRED)
 +  set(curlpp_LIBRARIES unofficial::curlpp::curlpp)
++elseif(NOT curlpp_LIBRARIES)
++  # curlpp's own curlppConfig.cmake exports the imported target
++  # curlpp::curlpp and never sets curlpp_LIBRARIES. When that config is the
++  # one that wins -- it ships in $PREFIX/lib/cmake/curlpp, so it does --
++  # ${curlpp_LIBRARIES} expands to nothing here and libminiocpp.so gets
++  # linked against neither curlpp nor curl. Nothing complains: a shared
++  # object may keep undefined symbols, so the failure waits until something
++  # loads the library and dies on "undefined symbol:
++  # _ZTIN6curlpp12RuntimeErrorE".
++  #
++  # CURL must be found first: curlpp::curlpp names CURL::libcurl in its
++  # INTERFACE_LINK_LIBRARIES, and linking a target that references an
++  # undefined imported target is a generate-time error.
++  find_package(CURL REQUIRED)
++  set(curlpp_LIBRARIES curlpp::curlpp)
 +endif()
 +
 +find_package(inih CONFIG REQUIRED)
@@ -31,7 +46,7 @@ index c2610db..7e27bdf 100644
    nlohmann_json::nlohmann_json
    pugixml
    OpenSSL::SSL OpenSSL::Crypto
-@@ -197,7 +206,7 @@ if (MINIO_CPP_TEST)
+@@ -208,7 +232,7 @@ if (MINIO_CPP_TEST)
    add_executable(tests tests/tests.cc)
    target_compile_features(tests PUBLIC cxx_std_${MINIO_CPP_STD})
    target_include_directories(tests PRIVATE ${CMAKE_CURRENT_LIST_DIR}/include)
@@ -40,4 +55,3 @@ index c2610db..7e27bdf 100644
  endif()
  
  # Minio C++ Documentation
--- 

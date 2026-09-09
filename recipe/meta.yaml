@@ -24,7 +24,14 @@ build:
   # removal is a no-op when the releases are already gone), then this
   # rebuild to repopulate from scratch. _3 rather than back to _0 so the
   # filename is one that has never been uploaded for this package.
-  number: 3
+  #
+  # _4: the _3 build shipped a libminiocpp.so that records neither libcurlpp
+  # nor libcurl in DT_NEEDED while carrying 30 undefined curlpp symbols, so
+  # anything loading it died with "undefined symbol:
+  # _ZTIN6curlpp12RuntimeErrorE" (root-plus CI: all four Cloud tests). The
+  # patch now supplies curlpp::curlpp when curlpp's own config leaves
+  # curlpp_LIBRARIES unset.
+  number: 4
 
 source:
   git_url: "https://github.com/minio/minio-cpp"
